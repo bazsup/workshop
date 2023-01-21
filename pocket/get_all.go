@@ -1,14 +1,12 @@
 package pocket
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 func (h *handler) GetAll(c echo.Context) error {
-	fmt.Printf("h.db %v", h.db == nil)
 	stml, err := h.db.Prepare("SELECT * FROM cloud_pockets")
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
