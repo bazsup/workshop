@@ -33,7 +33,7 @@ func TestCreatePocket(t *testing.T) {
 					return nil, err
 				}
 				row := sqlmock.NewRows([]string{"id"}).AddRow(1)
-				mock.ExpectQuery(`INSERT INTO cloud_pockets VALUES (null,?,?,?) `).WithArgs("test_name", "THB", 10.0).WillReturnRows(row)
+				mock.ExpectQuery(`INSERT INTO cloud_pockets (name,currency,balance) VALUES ($1,$2,$3) RETURNING id`).WithArgs("test_name", "THB", 10.0).WillReturnRows(row)
 				return db, err
 			},
 			`{"name": "test_name", "currency":"THB","balance":10.0}`,

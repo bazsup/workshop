@@ -26,10 +26,10 @@ func TestCreateItPocket(t *testing.T) {
 
 	hPocket := pocket.New(db)
 
-	e.POST("/pockets", hPocket.CreatePocket)
+	e.POST("/cloud-pockets", hPocket.CreatePocket)
 
 	reqBody := `{"name": "test_name", "currency":"THB","balance":10.0}`
-	req := httptest.NewRequest(http.MethodPost, "/pockets", strings.NewReader(reqBody))
+	req := httptest.NewRequest(http.MethodPost, "/cloud-pockets", strings.NewReader(reqBody))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 
