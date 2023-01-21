@@ -1,7 +1,11 @@
+//go:build integration
+// +build integration
+
 package pocket_test
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -18,12 +22,13 @@ func TestGetAllCloudPocketsIT(t *testing.T) {
 
 	cfg := config.New().All()
 	sql, err := sql.Open("postgres", cfg.DBConnection)
+	fmt.Printf("> it test h.db %v", sql == nil)
 	if err != nil {
 		t.Error(err)
 	}
-
+	sql.Exec("INSERT INTO cloud_pockets (id, name, currency, balance) VALUES (12345, 'Travel Fund', 'THB', 100);")
+	sql.Exec("INSERT INTO cloud_pockets (id, name, currency, balance) VALUES (67890, 'Savings', 'THB', 200);")
 	hPocket := pocket.New(sql)
-
 	e.GET("/cloud-pockets", hPocket.GetAll)
 
 	req := httptest.NewRequest(http.MethodGet, "/cloud-pockets", nil)
