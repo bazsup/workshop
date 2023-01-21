@@ -10,10 +10,6 @@ import (
 	"go.uber.org/zap"
 )
 
-type Err struct {
-	Message string `json:message`
-}
-
 func (h handler) getPocketById(c echo.Context) error {
 	logger := mlog.L(c)
 
@@ -29,13 +25,13 @@ func (h handler) getPocketById(c echo.Context) error {
 
 func getPocketById(db *sql.DB, id string) (PocketModel, error) {
 	result := PocketModel{}
-	stmt, err := db.Prepare("SELECT ID, Name, Category, Currency, Balance FROM cloud_pockets where id=$1")
+	stmt, err := db.Prepare("SELECT ID, Name, Currency, Balance FROM cloud_pockets where id=$1")
 	if err != nil {
 		return result, errors.New("can't insert Pocket into database")
 	}
 	row := stmt.QueryRow(id)
 
-	err = row.Scan(&result.ID, &result.Name, &result.Category, &result.Category, &result.Balance)
+	err = row.Scan(&result.ID, &result.Name, &result.Currency, &result.Balance)
 	if err != nil {
 		return result, errors.New("can't scan Pocket")
 	}
