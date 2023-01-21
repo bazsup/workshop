@@ -1,6 +1,6 @@
 //go:build unit
 
-package pocket
+package pocket_test
 
 import (
 	"database/sql"
