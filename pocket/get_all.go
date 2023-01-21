@@ -9,16 +9,16 @@ import (
 func (handler) GetAll(c echo.Context) error {
 	pockets := []PocketModel{
 		{
-			ID: 12345,
+			ID:   12345,
 			Name: "Travel Fund",
 			Currency: "THB",
-			Balance: 100,
+			Balance:  100,
 		},
 		{
-			ID: 67890,
+			ID:   67890,
 			Name: "Savings",
 			Currency: "THB",
-			Balance: 200,
+			Balance:  200,
 		},
 	}
 	return c.JSON(http.StatusOK, pockets)
