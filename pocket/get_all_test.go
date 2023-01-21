@@ -32,14 +32,12 @@ func TestGetAllCloudPockets(t *testing.T) {
 			{
 				"id": 12345,
 				"name": "Travel Fund",
-				"category": "Vacation",
 				"currency": "THB",
 				"balance": 100
 			},
 			{
 				"id": 67890,
 				"name": "Savings",
-				"category": "Emergency Fund",
 				"currency": "THB",
 				"balance": 200
 			}
