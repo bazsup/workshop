@@ -18,7 +18,8 @@ func New(db *sql.DB) *handler {
 }
 
 type TransferModel struct {
-	PocketIDSource string  `json:"pocket_id_source"`
-	PocketIDTarget string  `json:"pocket_id_target"`
+	ID             int64   `json:"id"`
+	PocketIDSource int     `json:"pocket_id_source"`
+	PocketIDTarget int     `json:"pocket_id_target"`
 	Amount         float64 `json:"amount"`
 }
