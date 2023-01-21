@@ -20,7 +20,8 @@ func (h handler) CreatePocket(c echo.Context) error {
 	}
 
 	var lastInsertId int
-	err = h.db.QueryRowContext(ctx, `INSERT INTO cloud_pockets  VALUES (null,?,?,?)`, pocket.Name, pocket.Currency, pocket.Balance).Scan(&lastInsertId)
+
+	err = h.db.QueryRowContext(ctx, `INSERT INTO cloud_pockets (name,currency,balance) VALUES ($1,$2,$3) RETURNING id`, pocket.Name, pocket.Currency, pocket.Balance).Scan(&lastInsertId)
 	if err != nil {
 		logger.Error("query row error", zap.Error(err))
 		return err
