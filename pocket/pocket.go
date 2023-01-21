@@ -5,7 +5,6 @@ import "database/sql"
 type PocketModel struct {
 	ID       int     `json:"id"`
 	Name     string  `json:"name"`
-	Category string  `json:"category"`
 	Currency string  `json:"currency"`
 	Balance  float64 `json:"balance"`
 }
