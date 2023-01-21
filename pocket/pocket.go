@@ -16,3 +16,9 @@ type handler struct {
 func New(db *sql.DB) *handler {
 	return &handler{db}
 }
+
+type TransferModel struct {
+	PocketIDSource string  `json:"pocket_id_source"`
+	PocketIDTarget string  `json:"pocket_id_target"`
+	Amount         float64 `json:"amount"`
+}
