@@ -19,7 +19,7 @@ func (h *handler) GetAll(c echo.Context) error {
 	pockets := []Pocket{}
 	for rows.Next() {
 		p := Pocket{}
-		err := rows.Scan(&p.ID, &p.Name, &p.Currency, &p.Balance)
+		err := rows.Scan(&p.ID, &p.Name, &p.ParentID, &p.Currency, &p.Balance)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Can't scan pocket cloud")
 		}

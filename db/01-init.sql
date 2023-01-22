@@ -11,6 +11,7 @@ CREATE SEQUENCE IF NOT EXISTS cloud_pocket_id;
 CREATE TABLE "cloud_pockets" (
     "id" int4 NOT NULL DEFAULT nextval('cloud_pocket_id'::regclass),
     "name" VARCHAR(255),
+    "parentID" int4,
     "currency" VARCHAR(3),
     "balance" float8 NOT NULL DEFAULT 0
 );

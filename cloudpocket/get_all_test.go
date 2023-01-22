@@ -36,9 +36,9 @@ func TestGetAllCloudPockets(t *testing.T) {
 		}
 
 		db, mock, _ := sqlmock.New()
-		rows := sqlmock.NewRows([]string{"id", "name", "currency", "balance"}).
-			AddRow(p1.ID, p1.Name, p1.Currency, p1.Balance).
-			AddRow(p2.ID, p2.Name, p2.Currency, p2.Balance)
+		rows := sqlmock.NewRows([]string{"id", "name", "parentID", "currency", "balance"}).
+			AddRow(p1.ID, p1.Name, nil, p1.Currency, p1.Balance).
+			AddRow(p2.ID, p2.Name, nil, p2.Currency, p2.Balance)
 		mock.ExpectPrepare("SELECT \\* FROM cloud_pockets").ExpectQuery().WillReturnRows(rows)
 		h := cloudpocket.New(db)
 
@@ -48,12 +48,14 @@ func TestGetAllCloudPockets(t *testing.T) {
 			{
 				"id": 12345,
 				"name": "Travel Fund",
+				"parentID":null,
 				"currency": "THB",
 				"balance": 100
 			},
 			{
 				"id": 67890,
 				"name": "Savings",
+				"parentID":null,
 				"currency": "THB",
 				"balance": 200
 			}

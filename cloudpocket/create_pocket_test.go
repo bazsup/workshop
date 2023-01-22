@@ -38,7 +38,7 @@ func TestCreatePocket(t *testing.T) {
 			},
 			`{"name": "test_name", "currency":"THB","balance":10.0}`,
 			http.StatusCreated,
-			`{"id": 1, "name": "test_name", "currency":"THB","balance":10.0}`,
+			`{"id": 1, "name": "test_name","parentID": null, "currency":"THB","balance":10.0}`,
 		},
 	}
 

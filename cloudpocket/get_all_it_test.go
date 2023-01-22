@@ -6,6 +6,7 @@ package cloudpocket_test
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -37,6 +38,7 @@ func TestGetAllCloudPocketsIT(t *testing.T) {
 
 	e.ServeHTTP(rec, req)
 
+	fmt.Println(rec.Body)
 	byteBuffer, err := io.ReadAll(rec.Body)
 	assert.NoError(t, err)
 

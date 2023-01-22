@@ -35,7 +35,7 @@ func TestCreateItPocket(t *testing.T) {
 
 	e.ServeHTTP(rec, req)
 
-	expected := `{"id": 1, "name": "test_name", "currency":"THB","balance":10.0}`
+	expected := `{"id": 1, "name": "test_name","parentID": null, "currency":"THB","balance":10.0}`
 	assert.Equal(t, http.StatusCreated, rec.Code)
 	assert.JSONEq(t, expected, rec.Body.String())
 }

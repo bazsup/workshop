@@ -5,14 +5,7 @@ import "database/sql"
 type Pocket struct {
 	ID       int     `json:"id"`
 	Name     string  `json:"name"`
-	Currency string  `json:"currency"`
-	Balance  float64 `json:"balance"`
-}
-
-type SubPocket struct {
-	ID       int     `json:"id"`
-	Name     string  `json:"name"`
-	ParentID int     `json:"parentID"`
+	ParentID *int    `json:"parentID"`
 	Currency string  `json:"currency"`
 	Balance  float64 `json:"balance"`
 }
