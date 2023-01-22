@@ -19,3 +19,10 @@ test-integration:
 test-e2e:
 	docker-compose -f docker-compose.e2e-test.yaml down && \
 	docker-compose -f docker-compose.e2e-test.yaml up --build --force-recreate --abort-on-container-exit --exit-code-from e2e_test
+
+pull:
+	git pull --rebase origin main
+
+push: 
+	make pull && make test && git push origin main
+	
