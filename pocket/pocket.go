@@ -1,4 +1,4 @@
-package cloud_pocket
+package cloudpocket
 
 import "database/sql"
 
