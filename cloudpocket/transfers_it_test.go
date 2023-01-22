@@ -121,12 +121,8 @@ func TestTransferInvalidDecimalIT(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	row1 := db.QueryRow("INSERT INTO cloud_pockets (name, currency, balance) VALUES ('Travel Fund', 'THB', 50) RETURNING id;")
-	row2 := db.QueryRow("INSERT INTO cloud_pockets (name, currency, balance) VALUES ('Savings', 'THB', 50) RETURNING id;")
-
-	var sourceID, targetID int
-	row1.Scan(&sourceID)
-	row2.Scan(&targetID)
+	sourceID := seedPocket(db, 50)
+	targetID := seedPocket(db, 50)
 
 	hPocket := cloudpocket.New(db)
 
@@ -150,6 +146,13 @@ func TestTransferInvalidDecimalIT(t *testing.T) {
 
 	assert.Equal(t, 50.0, getBalanceFor(db, sourceID))
 	assert.Equal(t, 50.0, getBalanceFor(db, targetID))
+}
+
+func seedPocket(db *sql.DB, amount float64) int {
+	var id int
+	row1 := db.QueryRow(fmt.Sprintf("INSERT INTO cloud_pockets (name, currency, balance) VALUES ('Travel Fund', 'THB', %f) RETURNING id;", amount))
+	row1.Scan(&id)
+	return id
 }
 
 func getBalanceFor(db *sql.DB, id1 int) float64 {
