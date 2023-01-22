@@ -27,12 +27,12 @@ func TestGetPocketByIdIT(t *testing.T) {
 		t.Error(err)
 	}
 
-	stmt, err := sql.Prepare(`INSERT INTO cloud_pockets (id,name,currency,balance) VALUES ($1,$2,$3,$4) RETURNING id`)
+	stmt, err := sql.Prepare(`INSERT INTO cloud_pockets (name,currency,balance) VALUES ($1,$2,$3) RETURNING id`)
 	if err != nil {
 		fmt.Println("error: prepare")
 
 	}
-	row := stmt.QueryRow(5, "shoping", "THB", 100.10)
+	row := stmt.QueryRow("shoping", "THB", 100.3)
 
 	var id int
 	fmt.Printf("id: scan%v", id)
@@ -57,12 +57,12 @@ func TestGetPocketByIdIT(t *testing.T) {
 
 	err = json.Unmarshal(body, &pocket)
 
-	//expected := `{"name": "shoping", "currency":"THB","balance":100.10}`
+	//expected := `{"name": "shoping", "currency":"THB","balance":100.3}`
 	exp := cloudpocket.Pocket{
 		ID:       id,
 		Name:     "shoping",
 		Currency: "THB",
-		Balance:  100.10,
+		Balance:  100.30,
 	}
 	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.EqualValues(t, exp.ID, pocket.ID)
