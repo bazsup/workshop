@@ -25,7 +25,7 @@ func (h handler) GetPocketById(c echo.Context) error {
 
 func GetPocketById(db *sql.DB, id string) (Pocket, error) {
 	result := Pocket{}
-	stmt, err := db.Prepare("SELECT ID, Name, Currency, Balance FROM cloud_pockets where id=$1")
+	stmt, err := db.Prepare("SELECT id, name, currency, balance FROM cloud_pockets where id=$1")
 	if err != nil {
 		return result, errors.New("can't insert Pocket into database")
 	}
