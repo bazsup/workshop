@@ -26,8 +26,8 @@ func TestGetAllCloudPocketsIT(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	sql.Exec("INSERT INTO cloud_pockets (id, name, currency, balance) VALUES (1, 'Travel Fund', 'THB', 100.0);")
-	sql.Exec("INSERT INTO cloud_pockets (id, name, currency, balance) VALUES (2, 'Savings', 'THB', 200.0);")
+	sql.Exec("INSERT INTO cloud_pockets (name, currency, balance) VALUES ('Travel Fund', 'THB', 100.0);")
+	sql.Exec("INSERT INTO cloud_pockets (name, currency, balance) VALUES ('Savings', 'THB', 200.0);")
 	hPocket := pocket.New(sql)
 	e.GET("/cloud-pockets", hPocket.GetAll)
 
