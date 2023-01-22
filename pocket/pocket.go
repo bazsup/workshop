@@ -1,8 +1,8 @@
-package pocket
+package cloud_pocket
 
 import "database/sql"
 
-type PocketModel struct {
+type Pocket struct {
 	ID       int     `json:"id"`
 	Name     string  `json:"name"`
 	Currency string  `json:"currency"`
@@ -17,8 +17,8 @@ func New(db *sql.DB) *handler {
 	return &handler{db}
 }
 
-type TransferModel struct {
-	ID             int64   `json:"id"`
+type Transfer struct {
+	ID             int     `json:"id"`
 	PocketIDSource int     `json:"pocket_id_source"`
 	PocketIDTarget int     `json:"pocket_id_target"`
 	Amount         float64 `json:"amount"`
