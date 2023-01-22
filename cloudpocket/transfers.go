@@ -2,7 +2,6 @@ package cloudpocket
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/kkgo-software-engineering/workshop/mlog"
 	"github.com/labstack/echo/v4"
@@ -11,7 +10,7 @@ import (
 
 const (
 	cStmt = "INSERT INTO transfers (pocket_id_source, pocket_id_target, amount) VALUES ($1, $2, $3) RETURNING id;"
-	uStmt = "UPDATE cloud_pockets SET balance = $2 WHERE id = $1;"
+	uStmt = "UPDATE cloud_pockets SET balance=$1 WHERE id=$2;"
 )
 
 func (h handler) Transfer(c echo.Context) error {
@@ -29,18 +28,18 @@ func (h handler) Transfer(c echo.Context) error {
 	}
 
 	var sPocket, tPocket Pocket
-	sPocket, err = GetPocketById(h.db, strconv.Itoa(t.PocketIDSource))
+	sPocket, err = GetPocketById(h.db, t.PocketIDSource)
 	if err != nil {
 		logger.Error("get pocket error", zap.Error(err))
 		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusInternalServerError, err.Error()))
 	}
-	tPocket, err = GetPocketById(h.db, strconv.Itoa(t.PocketIDTarget))
+	tPocket, err = GetPocketById(h.db, t.PocketIDTarget)
 	if err != nil {
 		logger.Error("get pocket error", zap.Error(err))
 		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusInternalServerError, err.Error()))
 	}
 
-	_, err = h.db.Exec(uStmt, sPocket.ID, round(sPocket.Balance-t.Amount))
+	_, err = h.db.Exec(uStmt, round(sPocket.Balance-t.Amount), sPocket.ID)
 	if err != nil {
 		logger.Error("update source balance error", zap.Error(err))
 		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusInternalServerError, err.Error()))
@@ -51,7 +50,7 @@ func (h handler) Transfer(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.NewHTTPError(http.StatusBadRequest, "insufficient balance"))
 	}
 
-	_, err = h.db.Exec(uStmt, tPocket.ID, round(tPocket.Balance+t.Amount))
+	_, err = h.db.Exec(uStmt, round(tPocket.Balance+t.Amount), tPocket.ID)
 	if err != nil {
 		logger.Error("update target balance error", zap.Error(err))
 		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusInternalServerError, err.Error()))
