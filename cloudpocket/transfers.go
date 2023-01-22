@@ -32,24 +32,29 @@ func (h handler) Transfer(c echo.Context) error {
 	sPocket, err = GetPocketById(h.db, strconv.Itoa(t.PocketIDSource))
 	if err != nil {
 		logger.Error("get pocket error", zap.Error(err))
-		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusBadRequest, err.Error()))
+		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusInternalServerError, err.Error()))
 	}
 	tPocket, err = GetPocketById(h.db, strconv.Itoa(t.PocketIDTarget))
 	if err != nil {
 		logger.Error("get pocket error", zap.Error(err))
-		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusBadRequest, err.Error()))
+		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusInternalServerError, err.Error()))
 	}
 
 	_, err = h.db.Exec(uStmt, sPocket.ID, round(sPocket.Balance-t.Amount))
 	if err != nil {
 		logger.Error("update source balance error", zap.Error(err))
-		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusBadRequest, err.Error()))
+		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusInternalServerError, err.Error()))
+	}
+
+	if sPocket.Balance < t.Amount {
+		logger.Error("insufficient balance")
+		return c.JSON(http.StatusBadRequest, echo.NewHTTPError(http.StatusBadRequest, "insufficient balance"))
 	}
 
 	_, err = h.db.Exec(uStmt, tPocket.ID, round(tPocket.Balance+t.Amount))
 	if err != nil {
 		logger.Error("update target balance error", zap.Error(err))
-		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusBadRequest, err.Error()))
+		return c.JSON(http.StatusInternalServerError, echo.NewHTTPError(http.StatusInternalServerError, err.Error()))
 	}
 
 	var lastInsertId int
