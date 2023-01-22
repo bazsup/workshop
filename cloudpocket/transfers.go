@@ -19,7 +19,7 @@ func (h handler) Transfer(c echo.Context) error {
 	err := c.Bind(&transfer)
 	if transfer.Amount < 1 {
 		logger.Error("bad request invalid amount")
-		return echo.NewHTTPError(http.StatusBadRequest, "bad request invalid amount")
+		return c.JSON(http.StatusBadRequest, echo.NewHTTPError(http.StatusBadRequest, "invalid amount"))
 	}
 	if err != nil {
 		logger.Error("bad request body", zap.Error(err))

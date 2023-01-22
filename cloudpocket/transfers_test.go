@@ -16,7 +16,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateTransfer(t *testing.T) {
+func TestCreateTransferShouldBeSuccess(t *testing.T) {
 	tests := []struct {
 		name       string
 		cfgFlag    config.FeatureFlag
@@ -45,7 +45,7 @@ func TestCreateTransfer(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			e := echo.New()
-			req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(tc.reqBody))
+			req := httptest.NewRequest(http.MethodPost, "/cloud-pocket/transfers", strings.NewReader(tc.reqBody))
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
@@ -60,4 +60,36 @@ func TestCreateTransfer(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestCreateTransferInvalidAmountShouldBeFail(t *testing.T) {
+	t.Run("Create transfer with invalid amount should got error", func(t *testing.T) {
+
+		reqBody := `{"pocket_id_source": 1,"pocket_id_target": 1,"amount": -1.0}`
+		wantStatus := http.StatusBadRequest
+		wantBody := `{"message":"invalid amount"}`
+
+		db, _, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
+		if err != nil {
+			t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+		}
+		defer db.Close()
+
+		e := echo.New()
+		req := httptest.NewRequest(http.MethodPost, "/cloud-pocket/transfers", strings.NewReader(reqBody))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		ctx := e.NewContext(req, rec)
+		h := cloudpocket.New(db)
+
+		err = h.Transfer(ctx)
+
+		if err != nil {
+			t.Errorf("should not return error but it got %v", err)
+		}
+		if ctx.Response().Status != wantStatus {
+			t.Errorf("should status bed request but it got %v", ctx.Response().Status)
+		}
+		assert.JSONEq(t, wantBody, rec.Body.String())
+	})
 }
