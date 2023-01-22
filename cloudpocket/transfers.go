@@ -19,7 +19,7 @@ func (h handler) Transfer(c echo.Context) error {
 	var t Transfer
 	ctx := c.Request().Context()
 	err := c.Bind(&t)
-	if t.Amount < 0.01 {
+	if !t.IsValidAmount() {
 		logger.Error("bad request invalid amount")
 		return c.JSON(http.StatusBadRequest, echo.NewHTTPError(http.StatusBadRequest, "invalid amount"))
 	}

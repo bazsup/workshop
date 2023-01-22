@@ -28,6 +28,14 @@ type Transfer struct {
 	Amount         float64 `json:"amount"`
 }
 
+func (t *Transfer) IsValidAmount() bool {
+	return t.Amount >= 0.01 && t.isValidDecimal()
+}
+
+func (t *Transfer) isValidDecimal() bool {
+	return round(t.Amount) == t.Amount
+}
+
 func round(num float64) float64 {
 	return math.Round(num*100) / 100.0
 }
