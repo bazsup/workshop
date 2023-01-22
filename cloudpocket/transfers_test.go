@@ -1,6 +1,6 @@
 //go:build unit
 
-package pocket_test
+package cloudpocket_test
 
 import (
 	"database/sql"
@@ -10,8 +10,8 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/kkgo-software-engineering/workshop/cloudpocket"
 	"github.com/kkgo-software-engineering/workshop/config"
-	"github.com/kkgo-software-engineering/workshop/pocket"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
@@ -51,7 +51,7 @@ func TestCreateTransfer(t *testing.T) {
 			c := e.NewContext(req, rec)
 
 			db, err := tc.sqlFn()
-			h := pocket.New(db)
+			h := cloudpocket.New(db)
 			// Assertions
 			assert.NoError(t, err)
 			if assert.NoError(t, h.Transfer(c)) {

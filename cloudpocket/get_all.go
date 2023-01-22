@@ -1,4 +1,4 @@
-package pocket
+package cloudpocket
 
 import (
 	"net/http"
@@ -16,9 +16,9 @@ func (h *handler) GetAll(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "Can't query")
 	}
-	pockets := []PocketModel{}
+	pockets := []Pocket{}
 	for rows.Next() {
-		p := PocketModel{}
+		p := Pocket{}
 		err := rows.Scan(&p.ID, &p.Name, &p.Currency, &p.Balance)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Can't scan pocket cloud")

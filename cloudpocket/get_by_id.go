@@ -1,4 +1,4 @@
-package pocket
+package cloudpocket
 
 import (
 	"database/sql"
@@ -10,11 +10,11 @@ import (
 	"go.uber.org/zap"
 )
 
-func (h handler) getPocketById(c echo.Context) error {
+func (h handler) GetPocketById(c echo.Context) error {
 	logger := mlog.L(c)
 
 	Id := c.Param("id")
-	pocket, err := getPocketById(h.db, Id)
+	pocket, err := GetPocketById(h.db, Id)
 	if err != nil {
 		logger.Error("Unsuccessful query", zap.Error(err))
 		return echo.NewHTTPError(http.StatusInternalServerError, "Unsuccessful query", err.Error())
@@ -23,8 +23,8 @@ func (h handler) getPocketById(c echo.Context) error {
 	return c.JSON(http.StatusOK, pocket)
 }
 
-func getPocketById(db *sql.DB, id string) (PocketModel, error) {
-	result := PocketModel{}
+func GetPocketById(db *sql.DB, id string) (Pocket, error) {
+	result := Pocket{}
 	stmt, err := db.Prepare("SELECT ID, Name, Currency, Balance FROM cloud_pockets where id=$1")
 	if err != nil {
 		return result, errors.New("can't insert Pocket into database")

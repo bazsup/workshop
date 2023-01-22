@@ -1,6 +1,6 @@
 //go:build integration
 
-package pocket_test
+package cloudpocket_test
 
 import (
 	"database/sql"
@@ -9,14 +9,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/kkgo-software-engineering/workshop/cloudpocket"
 	"github.com/kkgo-software-engineering/workshop/config"
-	"github.com/kkgo-software-engineering/workshop/pocket"
 	"github.com/labstack/echo/v4"
-	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateItTransfer(t *testing.T) {
+func TestCreateItPocket(t *testing.T) {
 	e := echo.New()
 
 	cfg := config.New().All()
@@ -25,18 +24,18 @@ func TestCreateItTransfer(t *testing.T) {
 		t.Error(err)
 	}
 
-	hPocket := pocket.New(db)
+	hPocket := cloudpocket.New(db)
 
-	e.POST("/transfers", hPocket.Transfer)
+	e.POST("/cloud-pockets", hPocket.CreatePocket)
 
-	reqBody := `{"pocket_id_source":1,"pocket_id_target":3,"amount":1.0}`
-	req := httptest.NewRequest(http.MethodPost, "/transfers", strings.NewReader(reqBody))
+	reqBody := `{"name": "test_name", "currency":"THB","balance":10.0}`
+	req := httptest.NewRequest(http.MethodPost, "/cloud-pockets", strings.NewReader(reqBody))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 
 	e.ServeHTTP(rec, req)
 
-	expected := `{"id":1,"pocket_id_source":1,"pocket_id_target":3,"amount":1.0}`
+	expected := `{"id": 1, "name": "test_name", "currency":"THB","balance":10.0}`
 	assert.Equal(t, http.StatusCreated, rec.Code)
 	assert.JSONEq(t, expected, rec.Body.String())
 }
