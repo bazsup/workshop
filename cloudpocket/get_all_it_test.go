@@ -1,7 +1,7 @@
 //go:build integration
 // +build integration
 
-package pocket_test
+package cloudpocket_test
 
 import (
 	"database/sql"
@@ -11,8 +11,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/kkgo-software-engineering/workshop/cloudpocket"
 	"github.com/kkgo-software-engineering/workshop/config"
-	"github.com/kkgo-software-engineering/workshop/pocket"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
@@ -28,7 +28,7 @@ func TestGetAllCloudPocketsIT(t *testing.T) {
 	}
 	sql.Exec("INSERT INTO cloud_pockets (id, name, currency, balance) VALUES (1, 'Travel Fund', 'THB', 100.0);")
 	sql.Exec("INSERT INTO cloud_pockets (id, name, currency, balance) VALUES (2, 'Savings', 'THB', 200.0);")
-	hPocket := pocket.New(sql)
+	hPocket := cloudpocket.New(sql)
 	e.GET("/cloud-pockets", hPocket.GetAll)
 
 	req := httptest.NewRequest(http.MethodGet, "/cloud-pockets", nil)
@@ -40,7 +40,7 @@ func TestGetAllCloudPocketsIT(t *testing.T) {
 	byteBuffer, err := io.ReadAll(rec.Body)
 	assert.NoError(t, err)
 
-	var pockets []pocket.PocketModel
+	var pockets []cloudpocket.Pocket
 	err = json.Unmarshal(byteBuffer, &pockets)
 	assert.NoError(t, err)
 

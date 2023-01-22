@@ -1,4 +1,4 @@
-package pocket
+package cloudpocket
 
 import (
 	"net/http"
@@ -10,7 +10,7 @@ import (
 
 func (h handler) CreatePocket(c echo.Context) error {
 	logger := mlog.L(c)
-	pocket := new(PocketModel)
+	pocket := new(Pocket)
 	ctx := c.Request().Context()
 
 	err := c.Bind(&pocket)

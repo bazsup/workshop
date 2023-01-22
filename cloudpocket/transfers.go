@@ -1,4 +1,4 @@
-package pocket
+package cloudpocket
 
 import (
 	"net/http"
@@ -14,7 +14,7 @@ const (
 
 func (h handler) Transfer(c echo.Context) error {
 	logger := mlog.L(c)
-	var transfer TransferModel
+	var transfer Transfer
 	ctx := c.Request().Context()
 	err := c.Bind(&transfer)
 	if transfer.Amount < 1 {
@@ -24,13 +24,13 @@ func (h handler) Transfer(c echo.Context) error {
 	if err != nil {
 		logger.Error("bad request body", zap.Error(err))
 	}
-	var lastInsertId int64
+	var lastInsertId int
 	err = h.db.QueryRowContext(ctx, cStmt, transfer.PocketIDSource, transfer.PocketIDTarget, transfer.Amount).Scan(&lastInsertId)
 	if err != nil {
 		logger.Error("query row error", zap.Error(err))
 		return err
 	}
-	logger.Info("create successfully", zap.Int64("id", lastInsertId))
+	logger.Info("create successfully", zap.Int("id", lastInsertId))
 	transfer.ID = lastInsertId
 	return c.JSON(http.StatusCreated, transfer)
 }
